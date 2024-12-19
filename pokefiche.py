@@ -1,7 +1,6 @@
 # Importation des bibliothèques nécessaires
 import requests
 import markdown
-import sys
 import webbrowser
 
 # Fonction pour télécharger les données d'un Pokémon depuis l'API PokeAPI
