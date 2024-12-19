@@ -2,6 +2,7 @@
 import requests
 import markdown
 import webbrowser
+from md_to_html import convert_markdown_to_html
 
 # Fonction pour télécharger les données d'un Pokémon depuis l'API PokeAPI
 def download_poke(id: int) -> dict:
@@ -69,9 +70,7 @@ def fiche_pokemon(id: int) :
     poke_to_md(data, md_filename)
 
     # Conversion du Markdown en HTML
-    with open(md_filename, 'r') as f:
-        md_content = f.read()
-    html_content = markdown.markdown(md_content)
+    html_content = convert_markdown_to_html(md_filename)
 
     # Génération du fichier HTML
     with open(html_filename, 'w') as f:
