@@ -1,20 +1,14 @@
 import markdown
 
-def convert_markdown_to_html(input_file, output_file):
-    # Lire le fichier Markdown
-    with open(input_file, 'r', encoding='utf-8') as md_file:
-        md_content = md_file.read()  # Lire le contenu
 
-    # Convertir en HTML
-    html_content = markdown.markdown(md_content)  # Conversion
-
-    # Écrire le fichier HTML
-    with open(output_file, 'w', encoding='utf-8') as html_file:
-        html_file.write(html_content)  # Écrire le contenu
-
-    print("Conversion réussie !")  # Message de succès
-
-input_file = 'input.md'  
-output_file = 'output.html'  
-
-convert_markdown_to_html(input_file, output_file)
+def convert(md_file, html_file):
+    # Lire le contenu du fichier Markdown
+    with open(md_file, 'r', encoding='utf-8') as f:
+        md_content = f.read()
+    
+    # Convertir le Markdown en HTML
+    html_content = markdown.markdown(md_content)
+    
+    # Écrire le contenu HTML dans le fichier de sortie
+    with open(html_file, 'w', encoding='utf-8') as f:
+        f.write(html_content)

@@ -1,74 +1,60 @@
-# Importation des bibliothèques nécessaires
 import requests
 import markdown
-# Pour que sa ouvre automatiquement une page Web
-import webbrowser
-from md_to_html import convert_markdown_to_html
+from md_to_html import convert
 
-# Fonction pour télécharger les données d'un Pokémon depuis l'API PokeAPI
+# Fonction pour télécharger les données d'un pokémon depuis l'API
 def download_poke(id: int) -> dict:
-    """Télécharge les données d'un Pokémon depuis l'API PokeAPI."""
-    try:
-        url = f"https://pokeapi.co/api/v2/pokemon/{id}/"
-        response = requests.get(url)
-        response.raise_for_status()
-        return response.json()
-    except requests.exceptions.RequestException as e:
-        print(f"Erreur lors de la requête : {e}")
-        return None
+    # URL de l'API pour récupérer les données d'un pokémon
+    url = f"https://pokeapi.co/api/v2/pokemon/{id}/"
+    # Récupération des données sous forme de JSON
+    return requests.get(url).json()
 
-# Fonction pour générer un fichier Markdown à partir des données d'un Pokémon
+
 def poke_to_md(data: dict, filename: str) -> None:
-    """Génère un fichier Markdown à partir des données d'un Pokémon."""
-    if data is None:
-        return
-    try:
-        name = data['name'].capitalize()
-        weight = data['weight']
-        height = data['height']
-        types = [t['type']['name'] for t in data['types']]
-        stats = {stat['stat']['name']: stat['base_stat'] for stat in data['stats']}
-        image_url = data['sprites']['front_default']
+    # Récupération du nom du pokémon
+    name = data['name'].capitalize()
+    # Récupération de la taille et du poids du pokémon
+    height, weight = data['height'], data['weight']
+    # Récupération des types du pokémon
+    types = ', '.join(t['type']['name'] for t in data['types'])
+    # Récupération des statistiques du pokémon
+    stats = {stat['stat']['name']: stat['base_stat'] for stat in data['stats']}
+    # Récupération de l'image du pokémon
+    sprite = data['sprites']['front_default']
 
-        with open(filename, 'w') as f:
-            f.write(f"# Fiche de {name}\n\n")
-            f.write(f"![{name}]({image_url})\n\n")
-            f.write(f"## Informations\n")
-            f.write(f"- **Poids**: {weight}\n")
-            f.write(f"- **Taille**: {height}\n")
-            f.write(f"- **Types**: {', '.join(types)}\n")
-            f.write(f"\n## Statistiques\n")
-            for stat, value in stats.items():
-                f.write(f"- **{stat}**: {value}\n")
-    except KeyError as e:
-        print(f"Erreur lors de la génération du fichier Markdown : {e}")
+    # Création du fichier Markdown
+    with open(filename, 'w', encoding='utf-8') as md_file:
+        # Écriture du titre du fichier
+        md_file.write(f"# Fiche de {name}\n\n")
+        
+         # Écriture de l'image du pokémon
+        md_file.write(f"\n![{name}]({sprite})\n")
 
-# Fonction pour générer une fiche Markdown et une fiche HTML pour un Pokémon donné
-def fiche_pokemon(id: int) :
-    """Génère une fiche Markdown et une fiche HTML pour un Pokémon donné."""
+        # Écriture des informations du pokémon
+        md_file.write("## Informations\n")
+        md_file.write(f"- **Taille**: {height / 10}\n")
+        md_file.write(f"- **Poids**: {weight / 10}\n")
+        md_file.write(f"- **Types**: {types}\n")
+        
+        # Écriture des statistiques du pokémon
+        md_file.write("## Statistiques\n")
+        for stat_name, stat_value in stats.items():
+            md_file.write(f"  - **{stat_name}**: {stat_value}\n")
+        
+       
+
+
+
+# Fonction pour générer la fiche d'un pokémon
+def fiche_pokemon(id: int) -> None:
+    # Téléchargement des données du pokémon
     data = download_poke(id)
-    md_filename = f"pokemon_{id}.md"
-    html_filename = f"pokemon_{id}.html"
-
-    poke_to_md(data, md_filename)
-    if data is not None:
-        html_content = convert_markdown_to_html(md_filename)
-
-        with open(html_filename, 'w') as f:
-            f.write("<html><head><title>Fiche de Pokémon</title></head><body>")
-            f.write(html_content)
-            f.write("</body></html>")
-
-        print(f"Fiche générée : {md_filename} et {html_filename}")
-        webbrowser.open(html_filename)
-
-# Point d'entrée du programme
-if __name__ == "__main__":
-    while True:
-        try:
-            pokemon_id = int(input("Veuillez entrer l'ID du Pokémon : "))
-            fiche_pokemon(pokemon_id)
-            break
-        except ValueError:
-            print("Erreur : l'ID doit être un entier.")
+    # Nom du fichier
+    filename = f"pokemon_{id}"
+    # Conversion des données en fichier Markdown
+    poke_to_md(data, f"{filename}.md")
+    # Conversion du fichier Markdown en fichier HTML
+    convert(f"{filename}.md", f"{filename}.html")
+    # Affichage du message de réussite
+    print(f"Fiche générée: {filename}.html")
 
