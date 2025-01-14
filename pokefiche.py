@@ -58,3 +58,4 @@ def fiche_pokemon(id: int) -> None:
     # Affichage du message de réussite
     print(f"Fiche générée: {filename}.html")
 
+
