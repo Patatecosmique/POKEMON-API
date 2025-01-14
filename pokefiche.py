@@ -16,7 +16,7 @@ def poke_to_md(data: dict, filename: str) -> None:
     # Récupération de la taille et du poids du pokémon
     height, weight = data['height'], data['weight']
     # Récupération des types du pokémon
-    types = ', '.join(t['type']['name'] for t in data['types'])
+    types = ','.join(t['type']['name'] for t in data['types'])
     # Récupération des statistiques du pokémon
     stats = {stat['stat']['name']: stat['base_stat'] for stat in data['stats']}
     # Récupération de l'image du pokémon
@@ -32,8 +32,8 @@ def poke_to_md(data: dict, filename: str) -> None:
 
         # Écriture des informations du pokémon
         md_file.write("## Informations\n")
-        md_file.write(f"- **Taille**: {height / 10}\n")
-        md_file.write(f"- **Poids**: {weight / 10}\n")
+        md_file.write(f"- **Taille (m)**: {height / 10}\n")
+        md_file.write(f"- **Poids (kg)**: {weight / 10}\n")
         md_file.write(f"- **Types**: {types}\n")
         
         # Écriture des statistiques du pokémon
@@ -59,3 +59,10 @@ def fiche_pokemon(id: int) -> None:
     print(f"Fiche générée: {filename}.html")
 
 
+# Demande à l'utilisateur de saisir l'ID du Pokémon
+id_pokemon = input("Entrez l'ID du Pokémon: ")
+
+if id_pokemon == str(int(id_pokemon)):
+    fiche_pokemon(int(id_pokemon))
+else:
+    print("L'ID doit être un nombre entier.")
