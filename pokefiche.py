@@ -22,6 +22,7 @@ def poke_to_md(data: dict, filename: str) -> None:
     # Récupération de l'image du pokémon
     sprite = data['sprites']['front_default']
 
+
     # Création du fichier Markdown
     with open(filename, 'w', encoding='utf-8') as md_file:
         # Écriture du titre du fichier
