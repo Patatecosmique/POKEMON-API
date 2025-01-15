@@ -33,7 +33,11 @@ def compute_statistic(dataset: dict) -> dict:
         total_hp += hp_stat
 
     avg_hp = total_hp / total_pokemons if total_pokemons > 0 else 0
-    return {"name": name, "total_pokemons": total_pokemons, "pokemon_names": pokemon_names, "avg_hp": avg_hp}
+    return {"name": name, 
+            "total_pokemons": total_pokemons, 
+            "pokemon_names": pokemon_names, 
+            "avg_hp": avg_hp
+            }
 
 def dataset_to_md(dataset: dict, filename: str) -> None:
 
