@@ -127,7 +127,7 @@ def dataset_to_md(dataset: dict, filename: str) -> None:
                 md_file.write(f"    - {name}\n")
                 md_file.write("      (Image non disponible)\n")
         
-        # Le reste du code reste inchangé
+        
         md_file.write(f"- **PV moyen**: {statistics['avg_hp']:.2f}\n")
         md_file.write(f"- **Chance moyenne de capture**: {statistics['avg_capture_chance']:.2f}%\n")
         md_file.write(f"- **Attaque moyenne**: {statistics['avg_attack']:.2f}\n")
