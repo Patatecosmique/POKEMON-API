@@ -140,6 +140,7 @@ def dataset_to_md(dataset: dict, filename: str) -> None:
         md_file.write(f"- **Attaque moyenne**: {statistics['avg_attack']:.2f}\n")
         md_file.write(f"- **Défense moyenne**: {statistics['avg_defense']:.2f}\n")
         md_file.write(f"- **Vitesse moyenne**: {statistics['avg_speed']:.2f}\n")
+
         # Nombre de types uniques
         md_file.write("\n## Types des Pokémons\n")
         md_file.write(f"- **Nombre de types de pokémon**: {statistics['unique_types']}\n")
@@ -155,7 +156,7 @@ def dataset_to_md(dataset: dict, filename: str) -> None:
             details = get_pokemon_details(name)  # Récupérer les détails pour chaque Pokémon
             if details and 'image_url' in details:
                 md_file.write(f"    - {name}\n")
-                md_file.write(f"      <div>") # Pour coller les images des pokémons a gauche
+                md_file.write(f"      <div>") # Pour coller les images des pokémons a gauche (seul solution trouuvé")
                 md_file.write(f"<img src='{details['image_url']}' alt='{name}' width='100' height='100'>\n")
             else:
                 md_file.write(f"    - {name}\n")
@@ -175,7 +176,7 @@ def infos_locales(habitat_id: int, markdown_filename: str, html_filename: str) -
 # Demande à l'utilisateur de saisir l'ID d'un Habitat
 id_habitat = int(input("Entrez l'ID d'un habitat de 1 à 9 : "))
 
-# si le nomnre entree et pas entre 1 et 9 , on affiche un message d'erreur
+# Si le nomnre entree et pas entre 1 et 9 , on affiche un message d'erreur
 if 1 <= id_habitat <= 9:
     infos_locales(id_habitat, f"info-habitat_{id_habitat}.md", f"info-habitat_{id_habitat}.html")
 else:
