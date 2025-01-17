@@ -1,0 +1,78 @@
+# Fiche de l'habitat delcatty
+
+## Informations
+- **Nombre de Pokémon**: 71
+- **Noms des Pokémon**: 
+        - caterpie
+        - weedle
+        - pidgey
+        - paras
+        - venonat
+        - bellsprout
+        - metapod
+        - butterfree
+        - kakuna
+        - beedrill
+        - pidgeotto
+        - pidgeot
+        - pikachu
+        - raichu
+        - parasect
+        - venomoth
+        - weepinbell
+        - victreebel
+        - exeggcute
+        - pinsir
+        - exeggutor
+        - hoothoot
+        - ledyba
+        - spinarak
+        - pichu
+        - togepi
+        - natu
+        - aipom
+        - yanma
+        - murkrow
+        - pineco
+        - heracross
+        - sneasel
+        - noctowl
+        - ledian
+        - ariados
+        - togetic
+        - xatu
+        - sudowoodo
+        - forretress
+        - stantler
+        - celebi
+        - treecko
+        - wurmple
+        - seedot
+        - shroomish
+        - slakoth
+        - nincada
+        - skitty
+        - grovyle
+        - sceptile
+        - silcoon
+        - beautifly
+        - cascoon
+        - dustox
+        - nuzleaf
+        - shiftry
+        - breloom
+        - vigoroth
+        - slaking
+        - ninjask
+        - shedinja
+        - volbeat
+        - illumise
+        - swablu
+        - kecleon
+        - duskull
+        - tropius
+        - altaria
+        - dusclops
+        - delcatty
+- **PV moyen**: 59.24
+- **Chance moyenne de capture**: 39.73%
