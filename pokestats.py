@@ -152,8 +152,14 @@ def infos_locales(habitat_id: int, markdown_filename: str, html_filename: str) -
     print(f"Fiche générée: {html_filename}")
 
 # Demande à l'utilisateur de saisir l'ID d'un Habitat
-id_habitat = input("Entrez l'ID d'un habitat de 1 à 9 : ")
 
-infos_locales(int(id_habitat), f"info-habitat_{id_habitat}.md", f"info-habitat_{id_habitat}.html")
+id_habitat = int(input("Entrez l'ID d'un habitat de 1 à 9 : "))
+
+if 1 <= id_habitat <= 9:
+    infos_locales(id_habitat, f"info-habitat_{id_habitat}.md", f"info-habitat_{id_habitat}.html")
+else:
+    print("Erreur : L'ID doit être entre 1 et 9.")
+
+
 
 
