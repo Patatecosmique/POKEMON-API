@@ -18,16 +18,9 @@ def get_pokemon_details(pokemon_name: str) -> dict:
         return data
 
 
-def get_translation(url: str, language: str = "fr") -> str:
-    response = requests.get(url).json()
-    for entry in response.get("names", []):
-        if entry["language"]["name"] == language:
-            return entry["name"]
-    return None
-
-
-
 def compute_statistic(dataset: dict) -> dict:
+    """Cette fonction calcule les statistiques d'un habitat donné."""
+
     # Récupération du nom de l'habitat
     name = dataset['name'].capitalize()
 
@@ -58,7 +51,7 @@ def compute_statistic(dataset: dict) -> dict:
     defense_values = []
     speed_values = []
     all_types = []
-
+    # Création d'un dictionnaire pour les statistiques d'attaque
     for name in pokemon_names:
         details = get_pokemon_details(name)
         if details is not None:
@@ -77,7 +70,7 @@ def compute_statistic(dataset: dict) -> dict:
             pokemon_types = [t['type']['name'] for t in details['types']]
             all_types.append(pokemon_types)
 
-                        
+
             if capture_chances:
                 avg_capture_chance = sum(capture_chances) / total_pokemons
             else:
@@ -108,7 +101,7 @@ def compute_statistic(dataset: dict) -> dict:
         "avg_defense": avg_defense,
         "avg_speed": avg_speed,
         "unique_types": len(set(t for ts in all_types for t in ts)),
-        "pokemon_types": all_types  # 
+        "pokemon_types": all_types  
     }
 
 
@@ -120,12 +113,30 @@ def dataset_to_md(dataset: dict, filename: str) -> None:
     statistics = compute_statistic(dataset)
     
     with open(filename, 'w', encoding='utf-8') as md_file:
-
+        # En-tête
         md_file.write(f"# Fiche de l'habitat {dataset['name'].capitalize()}\n\n")
-        
+
+        # Statistiques
         md_file.write("## Informations générales\n")
         md_file.write(f"- **Nombre de Pokémon**: {statistics['total_pokemons']}\n")
+
+        # Calcul des statistiques
+        md_file.write(f"- **PV moyen**: {statistics['avg_hp']:.2f}\n") # arrondir à 2 décimales
+        md_file.write(f"- **Chance moyenne de capture**: {statistics['avg_capture_chance']:.2f}%\n")
+        md_file.write(f"- **Attaque moyenne**: {statistics['avg_attack']:.2f}\n")
+        md_file.write(f"- **Défense moyenne**: {statistics['avg_defense']:.2f}\n")
+        md_file.write(f"- **Vitesse moyenne**: {statistics['avg_speed']:.2f}\n")
+        
+        md_file.write("\n## Types des Pokémons\n")
+        md_file.write(f"- **Nombre de types de pokémon**: {statistics['unique_types']}\n")
+
+        # Récupérer les types de Pokémon
+        types_uniques = {t for ts in statistics['pokemon_types'] for t in ts}
+        for type_pokemon in types_uniques:
+            md_file.write(f"- **{type_pokemon.capitalize()}**\n")
         md_file.write(f"- **Noms des Pokémons**: \n")
+
+        # Liste des noms de Pokémon
         for name in statistics['pokemon_names']:
             details = get_pokemon_details(name)  # Récupérer les détails pour chaque Pokémon
             if details and 'image_url' in details:
@@ -136,21 +147,7 @@ def dataset_to_md(dataset: dict, filename: str) -> None:
                 md_file.write(f"    - {name}\n")
                 md_file.write("(Image non disponible)\n")
         
-        # Calcul des statistiques
-        md_file.write(f"- **PV moyen**: {statistics['avg_hp']:.2f}\n") # arrondir à 2 décimales
-        md_file.write(f"- **Chance moyenne de capture**: {statistics['avg_capture_chance']:.2f}%\n")
-        md_file.write(f"- **Attaque moyenne**: {statistics['avg_attack']:.2f}\n")
-        md_file.write(f"- **Défense moyenne**: {statistics['avg_defense']:.2f}\n")
-        md_file.write(f"- **Vitesse moyenne**: {statistics['avg_speed']:.2f}\n")
         
-        md_file.write("\n## Types de Pokémon\n")
-        md_file.write(f"- **Nombre de types de pokémon**: {statistics['unique_types']}\n")
-
-        # Récupérer les types de Pokémon
-        types_uniques = {t for ts in statistics['pokemon_types'] for t in ts}
-        for type_pokemon in types_uniques:
-            md_file.write(f"- **{type_pokemon.capitalize()}**\n")
-    
 def infos_locales(habitat_id: int, markdown_filename: str, html_filename: str) -> None:
     """
     Cette fonction utilise toutes les fonctions précédentes pour télécharger un jeu de données,
