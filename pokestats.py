@@ -4,11 +4,13 @@ from md_to_html import convert
 
 def get_dataset(id: int) -> dict:
     """Cette fonction récupère les informations d'un habitat."""
+
     url = f"https://pokeapi.co/api/v2/pokemon-habitat/{id}/"
     return requests.get(url).json()
 
 def get_pokemon_details(pokemon_name: str) -> dict:
     """Récupère les détails d'un Pokémon (y compris ses statistiques et l'URL de son image)."""
+
     url = f"https://pokeapi.co/api/v2/pokemon/{pokemon_name}/"
     response = requests.get(url)
     if response.status_code == 200:
@@ -55,43 +57,49 @@ def compute_statistic(dataset: dict) -> dict:
 
     # Création d'un dictionnaire pour les statistiques d'attaque
     for name in pokemon_names:
+
         details = get_pokemon_details(name)
-        if details is not None:
-            hp = details['stats'][0]['base_stat'] 
-            attack = details['stats'][1]['base_stat']  
-            defense = details['stats'][2]['base_stat']  
-            speed = details['stats'][5]['base_stat']  
-            
-            capture_chance = max(0, 100 - (hp + defense) * 0.5)
-            capture_chances.append(capture_chance)
-            attack_values.append(attack)
-            defense_values.append(defense)
-            speed_values.append(speed)
-            
+
+        # Récupération des stats de base
+        stats = details['stats']
+        hp = stats[0]['base_stat']
+        attack = stats[1]['base_stat']
+        defense = stats[2]['base_stat']
+        speed = stats[5]['base_stat']
+
+        # Calcul de la chance de capture
+        capture_chance = max(0, 100 - (hp + defense) * 0.5)
+
+        # Ajout des valeurs aux listes correspondantes
+        capture_chances.append(capture_chance)
+        attack_values.append(attack)
+        defense_values.append(defense)
+        speed_values.append(speed)
+
             # Collecte des types
-            pokemon_types = [t['type']['name'] for t in details['types']]
-            all_types.append(pokemon_types)
+        pokemon_types = [t['type']['name'] for t in details['types']]
+        all_types.append(pokemon_types)
 
 
-            if capture_chances:
-                avg_capture_chance = sum(capture_chances) / total_pokemons
-            else:
-                avg_capture_chance = 0 
+        if capture_chances:
+            avg_capture_chance = sum(capture_chances) / total_pokemons
+        else:
+            avg_capture_chance = 0 
 
-            if attack_values:
-                avg_attack = sum(attack_values) / total_pokemons
-            else:
-                avg_attack = 0
+        if attack_values:
+            avg_attack = sum(attack_values) / total_pokemons
+        else:
+            avg_attack = 0
 
-            if defense_values:
-                avg_defense = sum(defense_values) / total_pokemons
-            else:
-                avg_defense = 0
+        if defense_values:
+            avg_defense = sum(defense_values) / total_pokemons
+        else:
+            avg_defense = 0
 
-            if speed_values:
-                avg_speed = sum(speed_values) / total_pokemons
-            else:
-                avg_speed = 0
+        if speed_values:
+            avg_speed = sum(speed_values) / total_pokemons
+        else:
+            avg_speed = 0
     
     return {
         "name": name, 
