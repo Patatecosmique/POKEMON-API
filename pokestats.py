@@ -122,7 +122,8 @@ def dataset_to_md(dataset: dict, filename: str) -> None:
             details = get_pokemon_details(name)  # Récupérer les détails pour chaque Pokémon
             if details and 'image_url' in details:
                 md_file.write(f"    - {name}\n")
-                md_file.write(f"<img src='{details['image_url']}' alt='{name}' width='50' height='50'>\n")
+                md_file.write(f"      <div style='text-align: center;'>")
+                md_file.write(f"<img src='{details['image_url']}' alt='{name}' width='40' height='40'>\n")
             else:
                 md_file.write(f"    - {name}\n")
                 md_file.write("(Image non disponible)\n")
