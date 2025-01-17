@@ -51,6 +51,8 @@ def compute_statistic(dataset: dict) -> dict:
     defense_values = []
     speed_values = []
     all_types = []
+
+
     # Création d'un dictionnaire pour les statistiques d'attaque
     for name in pokemon_names:
         details = get_pokemon_details(name)
