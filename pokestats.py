@@ -112,7 +112,8 @@ def compute_statistic(dataset: dict) -> dict:
         "avg_attack": avg_attack,
         "avg_defense": avg_defense,
         "avg_speed": avg_speed,
-        "unique_types": len(set(t for ts in all_types for t in ts)),
+        # Calcule le nombre d'éléments uniques dans toutes les sous-listes de all_types & le "set" c'est pour éliminer les doublons et conserve uniquement les éléments uniques.
+        "unique_types": len(set(t for ts in all_types for t in ts)), 
         "pokemon_types": all_types  
     }
 
