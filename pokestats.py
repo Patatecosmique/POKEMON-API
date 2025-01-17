@@ -55,7 +55,7 @@ def compute_statistic(dataset: dict) -> dict:
     all_types = []
 
 
-    # Création d'un dictionnaire pour les statistiques d'attaque
+    # 
     for name in pokemon_names:
 
         details = get_pokemon_details(name)
@@ -76,7 +76,7 @@ def compute_statistic(dataset: dict) -> dict:
         defense_values.append(defense)
         speed_values.append(speed)
 
-            # Collecte des types
+        # Collecte des types
         pokemon_types = [t['type']['name'] for t in details['types']]
         all_types.append(pokemon_types)
 
