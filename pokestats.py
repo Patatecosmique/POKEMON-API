@@ -4,12 +4,14 @@ from md_to_html import convert
 
 def get_dataset(id: int) -> dict:
     """Cette fonction récupère les informations d'un habitat."""
+
     # Récupération des données d'un habitat 
     url = f"https://pokeapi.co/api/v2/pokemon-habitat/{id}/"
     return requests.get(url).json()
 
 def get_pokemon_details(pokemon_name: str) -> dict:
     """Récupère les détails d'un Pokémon (y compris ses statistiques et l'URL de son image)."""
+
     # Récupère les informations du Pokémon
     url = f"https://pokeapi.co/api/v2/pokemon/{pokemon_name}/"
     response = requests.get(url)
@@ -123,6 +125,7 @@ def dataset_to_md(dataset: dict, filename: str) -> None:
     statistics = compute_statistic(dataset)
     
     with open(filename, 'w', encoding='utf-8') as md_file:
+        
         # En-tête
         md_file.write(f"# Fiche de l'habitat {dataset['name'].capitalize()}\n\n")
 
