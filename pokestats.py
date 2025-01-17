@@ -143,7 +143,7 @@ def dataset_to_md(dataset: dict, filename: str) -> None:
         # Récupérer les types de Pokémon
         types_uniques = {t for ts in statistics['pokemon_types'] for t in ts}
         for type_pokemon in types_uniques:
-            md_file.write(f"- **{type_pokemon.capitalize()}**\n")
+            md_file.write(f"    - {type_pokemon}\n")
         md_file.write(f"- **Noms des Pokémons**: \n")
 
         # Liste des noms de Pokémon
