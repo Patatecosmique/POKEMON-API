@@ -8,21 +8,44 @@ def get_dataset(id: int) -> dict:
     return requests.get(url).json()
 
 def get_pokemon_details(pokemon_name: str) -> dict:
-    """Récupère les détails d'un Pokémon (y compris ses statistiques)."""
+    """Récupère les détails d'un Pokémon (y compris ses statistiques et l'URL de son image)."""
     url = f"https://pokeapi.co/api/v2/pokemon/{pokemon_name}/"
-    return requests.get(url).json()
-
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        # l'URL de l'image
+        data['image_url'] = data['sprites']['front_default']
+        return data
+    else:
+        print(f"Erreur lors de la récupération des détails de {pokemon_name}")
+        return None
 
 def compute_statistic(dataset: dict) -> dict:
+    # Récupération du nom de l'habitat
     name = dataset['name'].capitalize()
+
+    # Nom des pokemons vivant dans l'habitat
     pokemons = dataset.get("pokemon_species", [])
     total_pokemons = len(pokemons)
-    pokemon_names = [pokemon["name"] for pokemon in pokemons]
 
-    hp_values = [get_pokemon_details(name)['stats'][0]['base_stat'] for name in pokemon_names if get_pokemon_details(name) is not None]
-    avg_hp = sum(hp_values) / total_pokemons if hp_values else 0
+    # Création d'une liste de pokemon
+    pokemon_names = []
+    for pokemon in pokemons:
+        pokemon_names.append(pokemon["name"])
+
+    # Création d'un dictionnaire pour les statistiques HP
+    hp_values = []
+    for name in pokemon_names:
+        details = get_pokemon_details(name)
+        if details:
+            hp_values.append(details['stats'][0]['base_stat'])
+
+    # Calcul de la moyenne des HP
+    if hp_values:
+        avg_hp = sum(hp_values) / total_pokemons
+    else:
+        avg_hp = 0  
     
-    # Calcul des chances de capture, stats et types
     capture_chances = []
     attack_values = []
     defense_values = []
@@ -32,10 +55,10 @@ def compute_statistic(dataset: dict) -> dict:
     for name in pokemon_names:
         details = get_pokemon_details(name)
         if details is not None:
-            hp = details['stats'][0]['base_stat']  # HP
-            attack = details['stats'][1]['base_stat']  # Attack
-            defense = details['stats'][2]['base_stat']  # Defense
-            speed = details['stats'][5]['base_stat']  # Speed
+            hp = details['stats'][0]['base_stat'] 
+            attack = details['stats'][1]['base_stat']  
+            defense = details['stats'][2]['base_stat']  
+            speed = details['stats'][5]['base_stat']  
             
             capture_chance = max(0, 100 - (hp + defense) * 0.5)
             capture_chances.append(capture_chance)
@@ -47,10 +70,26 @@ def compute_statistic(dataset: dict) -> dict:
             pokemon_types = [t['type']['name'] for t in details['types']]
             all_types.append(pokemon_types)
 
-    avg_capture_chance = sum(capture_chances) / total_pokemons if capture_chances else 0
-    avg_attack = sum(attack_values) / total_pokemons if attack_values else 0
-    avg_defense = sum(defense_values) / total_pokemons if defense_values else 0
-    avg_speed = sum(speed_values) / total_pokemons if speed_values else 0
+                        
+            if capture_chances:
+                avg_capture_chance = sum(capture_chances) / total_pokemons
+            else:
+                avg_capture_chance = 0 
+
+            if attack_values:
+                avg_attack = sum(attack_values) / total_pokemons
+            else:
+                avg_attack = 0
+
+            if defense_values:
+                avg_defense = sum(defense_values) / total_pokemons
+            else:
+                avg_defense = 0
+
+            if speed_values:
+                avg_speed = sum(speed_values) / total_pokemons
+            else:
+                avg_speed = 0
     
     return {
         "name": name, 
@@ -62,7 +101,7 @@ def compute_statistic(dataset: dict) -> dict:
         "avg_defense": avg_defense,
         "avg_speed": avg_speed,
         "unique_types": len(set(t for ts in all_types for t in ts)),
-        "pokemon_types": all_types  # Liste de listes des types de chaque Pokémon
+        "pokemon_types": all_types  # 
     }
 
 
@@ -76,18 +115,27 @@ def dataset_to_md(dataset: dict, filename: str) -> None:
     with open(filename, 'w', encoding='utf-8') as md_file:
         md_file.write(f"# Fiche de l'habitat {statistics['name']}\n\n")
         
-        md_file.write("## Informations général\n")
+        md_file.write("## Informations générales\n")
         md_file.write(f"- **Nombre de Pokémon**: {statistics['total_pokemons']}\n")
         md_file.write(f"- **Noms des Pokémons**: \n")
         for name in statistics['pokemon_names']:
-            md_file.write(f"        - {name}\n")
+            details = get_pokemon_details(name)  # Récupérer les détails pour chaque Pokémon
+            if details and 'image_url' in details:
+                md_file.write(f"    - {name}\n")
+                md_file.write(f"      <img src='{details['image_url']}' alt='{name}' width='50' height='50'>\n")
+            else:
+                md_file.write(f"    - {name}\n")
+                md_file.write("      (Image non disponible)\n")
+        
+        # Le reste du code reste inchangé
         md_file.write(f"- **PV moyen**: {statistics['avg_hp']:.2f}\n")
         md_file.write(f"- **Chance moyenne de capture**: {statistics['avg_capture_chance']:.2f}%\n")
         md_file.write(f"- **Attaque moyenne**: {statistics['avg_attack']:.2f}\n")
         md_file.write(f"- **Défense moyenne**: {statistics['avg_defense']:.2f}\n")
         md_file.write(f"- **Vitesse moyenne**: {statistics['avg_speed']:.2f}\n")
-        md_file.write(f"- **Nombre de types uniques**: {statistics['unique_types']}\n")
+        
         md_file.write("\n## Types de Pokémon\n")
+        md_file.write(f"- **Nombre de types uniques**: {statistics['unique_types']}\n")
         all_types = set(t for types in statistics['pokemon_types'] for t in types)
         for pokemon_type in sorted(all_types):
             md_file.write(f"- **{pokemon_type.capitalize()}**\n")
