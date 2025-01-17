@@ -67,7 +67,7 @@ exemple :
 - Exploration plus attentive de l'API et réalisation d'essais réguliers pour éviter les erreurs.
 
 - Correction de l'erreur lors du lancement du code avec la commande python3 pokefiche.py
-<id_pokemon>. Remplacez-la par python pokefiche.py ou pokestats.py.
+<id_pokemon>. Remplacez-la par python .\pokefiche.py ou .\pokestats.py.
 
 - Utilisation de DOC python et de vidéos youtube exemple : https://www.python.org/doc/
 

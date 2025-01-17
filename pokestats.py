@@ -57,7 +57,7 @@ def compute_statistic(dataset: dict) -> dict:
     all_types = []
 
 
-    # 
+
     for name in pokemon_names:
 
         details = get_pokemon_details(name)
