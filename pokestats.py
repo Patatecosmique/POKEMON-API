@@ -16,9 +16,7 @@ def get_pokemon_details(pokemon_name: str) -> dict:
         # l'URL de l'image
         data['image_url'] = data['sprites']['front_default']
         return data
-    else:
-        print(f"Erreur lors de la récupération des détails de {pokemon_name}")
-        return None
+
 
 def compute_statistic(dataset: dict) -> dict:
     # Récupération du nom de l'habitat
@@ -113,7 +111,7 @@ def dataset_to_md(dataset: dict, filename: str) -> None:
     statistics = compute_statistic(dataset)
     
     with open(filename, 'w', encoding='utf-8') as md_file:
-        md_file.write(f"# Fiche de l'habitat {statistics['name']}\n\n")
+        md_file.write(f"# Fiche de l'habitat {dataset['name'].capitalize()}\n\n")
         
         md_file.write("## Informations générales\n")
         md_file.write(f"- **Nombre de Pokémon**: {statistics['total_pokemons']}\n")
@@ -138,7 +136,7 @@ def dataset_to_md(dataset: dict, filename: str) -> None:
         md_file.write("\n## Types de Pokémon\n")
         md_file.write(f"- **Nombre de types uniques**: {statistics['unique_types']}\n")
         all_types = set(t for types in statistics['pokemon_types'] for t in types)
-        for pokemon_type in sorted(all_types):
+        for pokemon_type in all_types:
             md_file.write(f"- **{pokemon_type.capitalize()}**\n")
 
 def infos_locales(habitat_id: int, markdown_filename: str, html_filename: str) -> None:
@@ -152,7 +150,6 @@ def infos_locales(habitat_id: int, markdown_filename: str, html_filename: str) -
     print(f"Fiche générée: {html_filename}")
 
 # Demande à l'utilisateur de saisir l'ID d'un Habitat
-
 id_habitat = int(input("Entrez l'ID d'un habitat de 1 à 9 : "))
 
 if 1 <= id_habitat <= 9:
