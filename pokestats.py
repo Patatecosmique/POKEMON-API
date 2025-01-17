@@ -122,10 +122,10 @@ def dataset_to_md(dataset: dict, filename: str) -> None:
             details = get_pokemon_details(name)  # Récupérer les détails pour chaque Pokémon
             if details and 'image_url' in details:
                 md_file.write(f"    - {name}\n")
-                md_file.write(f"      <img src='{details['image_url']}' alt='{name}' width='50' height='50'>\n")
+                md_file.write(f"<img src='{details['image_url']}' alt='{name}' width='50' height='50'>\n")
             else:
                 md_file.write(f"    - {name}\n")
-                md_file.write("      (Image non disponible)\n")
+                md_file.write("(Image non disponible)\n")
         
         
         md_file.write(f"- **PV moyen**: {statistics['avg_hp']:.2f}\n") # arrondir à 2 décimales
