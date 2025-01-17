@@ -4,13 +4,13 @@ from md_to_html import convert
 
 def get_dataset(id: int) -> dict:
     """Cette fonction récupère les informations d'un habitat."""
-
+    # Récupération des données d'un habitat 
     url = f"https://pokeapi.co/api/v2/pokemon-habitat/{id}/"
     return requests.get(url).json()
 
 def get_pokemon_details(pokemon_name: str) -> dict:
     """Récupère les détails d'un Pokémon (y compris ses statistiques et l'URL de son image)."""
-
+    # Récupère les informations du Pokémon
     url = f"https://pokeapi.co/api/v2/pokemon/{pokemon_name}/"
     response = requests.get(url)
     if response.status_code == 200:
@@ -44,7 +44,7 @@ def compute_statistic(dataset: dict) -> dict:
 
     # Calcul de la moyenne des HP
     if hp_values:
-        avg_hp = sum(hp_values) / total_pokemons
+        avg_hp = sum(hp_values) / total_pokemons # utilisation de "sum" pour additionner les valeurs des HP 
     else:
         avg_hp = 0  
     
@@ -136,7 +136,7 @@ def dataset_to_md(dataset: dict, filename: str) -> None:
         md_file.write(f"- **Attaque moyenne**: {statistics['avg_attack']:.2f}\n")
         md_file.write(f"- **Défense moyenne**: {statistics['avg_defense']:.2f}\n")
         md_file.write(f"- **Vitesse moyenne**: {statistics['avg_speed']:.2f}\n")
-        
+        # Nombre de types uniques
         md_file.write("\n## Types des Pokémons\n")
         md_file.write(f"- **Nombre de types de pokémon**: {statistics['unique_types']}\n")
 
