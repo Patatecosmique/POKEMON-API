@@ -48,7 +48,8 @@ souvent pour trouver les informations désirées.
 3. Gestion des erreurs :
 
 - Certaines erreurs empêchaient nos requêtes de fonctionner exmple en lancant le programme tel qui l'etait decrie
-python3 pokefiche.py <id_pokemon>.
+python3 pokefiche.py <id_pokemon>. 
+De plus pour le pokestats si on rentre l'ID n°5 la fiche n'est que rarement généré car il y à a des erreurs mais seulement pour l'ID 5.
 
 - Ou les identifiant était inexistant pour une recherche d'information sur un habitat, compris entre
 1 et 9.
